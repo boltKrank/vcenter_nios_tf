@@ -28,20 +28,24 @@ resource "vsphere_virtual_machine" "nios_vm" {
 
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
-
-    customize {
-      
-      network_interface {
-        ipv4_address = "192.168.68.80"
-        ipv6_netmask = 24
-      }
-
-      ipv4_gateway = "192.168.68.1"
-
-    }
-
-
-
   }
+
+  /*
+    vapp {
+    properties = {
+      "hostname"   = "vapp-vm"
+      "domain"     = "localdomain"
+      "ip_address" = "192.168.1.50"
+    }
+    ovf_environment_transport = ["com.vmware.guestInfo"]
+  }
+
+  extra_config = {
+    "guestinfo.hostname"   = "vapp-vm"
+    "guestinfo.domain"     = "localdomain"
+    "guestinfo.ip_address" = "192.168.1.50"
+  }
+
+  */
 
 }

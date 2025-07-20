@@ -9,6 +9,10 @@ resource "vsphere_virtual_machine" "nios_vm" {
 
   guest_id = "otherGuest64"
 
+  wait_for_guest_ip_timeout = 0
+
+  wait_for_guest_net_timeout = 0
+
   network_interface {
     network_id = data.vsphere_network.mgmt_network.id
     adapter_type = "vmxnet3"
@@ -30,22 +34,16 @@ resource "vsphere_virtual_machine" "nios_vm" {
     template_uuid = data.vsphere_virtual_machine.template.id
   }
 
-  /*
-    vapp {
-    properties = {
-      "hostname"   = "vapp-vm"
-      "domain"     = "localdomain"
-      "ip_address" = "192.168.1.50"
-    }
-    ovf_environment_transport = ["com.vmware.guestInfo"]
-  }
-
   extra_config = {
-    "guestinfo.hostname"   = "vapp-vm"
-    "guestinfo.domain"     = "localdomain"
-    "guestinfo.ip_address" = "192.168.1.50"
+    "guestinfo.userdata" = base64encode(<<EOF
+#infoblox-config 
+remote_console_enabled: y
+default_admin_password: Infoblox@312
+temp_license: enterprise dns dhcp cloud nios IB-V825
+EOF
+    )
   }
 
-  */
+
 
 }
